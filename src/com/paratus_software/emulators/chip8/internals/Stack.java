@@ -4,20 +4,23 @@ package com.paratus_software.emulators.chip8.internals;
  * Created by arthur on 8/14/16.
  */
 public class Stack {
-    private char[] stackMemory;
-    private int stackPointer;
+    private static char[] stackMemory = new char[16];
+    private static int stackPointer = 0;
 
-    public Stack(){
-        stackMemory = new char[16];
-        stackPointer = 0;
+    public static void setPointerTo(int index){
+        stackPointer = index;
     }
 
-    public void setPointerTo(int index){
-        this.stackPointer = index;
+    public static void increment(){
+        stackPointer++;
     }
 
-    public char getValue(){
-        return this.stackMemory[this.stackPointer];
+    public static char getValue(){
+        return stackMemory[stackPointer];
+    }
+
+    public static void setValue(char value){
+        stackMemory[stackPointer] = value;
     }
 
 

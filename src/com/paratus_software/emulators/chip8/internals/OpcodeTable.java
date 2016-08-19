@@ -83,19 +83,15 @@ public class OpcodeTable {
      Jump to location nnn.
      */
     private void initOneBasedOpcodes(){
-        for(int i = 0x1000; i < 0x1FFF; i++){
+        for(int i = 0x1000; i <= 0x1FFF; i++){
             //need to grab the lowest 12 bits from i and pass it to the JumpSubroutine
+
+            //for debugging
+            if(opcodes[i] != null){
+                throw new Error("Overwriting existing opcode!!!!!");
+            }
             opcodes[i] = new JumpSubroutine(i & 0x0FFF);
         }
-    }
-
-    private SubroutineInterface jumpSubroutine(final int address){
-        return new SubroutineInterface() {
-            @Override
-            public void execute() {
-                Registers.ProgramCouter = address;
-            }
-        };
     }
 
 
@@ -113,6 +109,15 @@ public class OpcodeTable {
         @Override
         public void execute() {
             Registers.ProgramCouter = addressToJumpTo;
+        }
+    }
+
+    private class CallSubroutine implements SubroutineInterface {
+
+        @Override
+        public void execute() {
+            Stack.increment();
+            
         }
     }
 }
