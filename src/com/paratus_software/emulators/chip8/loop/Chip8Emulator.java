@@ -38,4 +38,5 @@ public class Chip8Emulator {
         // | secondValue then ORs them together
         return opcode;
     }
+
 }

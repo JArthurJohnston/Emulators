@@ -12,5 +12,13 @@ public class Stack {
         stackPointer = 0;
     }
 
+    public void setPointerTo(int index){
+        this.stackPointer = index;
+    }
+
+    public char getValue(){
+        return this.stackMemory[this.stackPointer];
+    }
+
 
 }

@@ -1,5 +1,9 @@
 package com.paratus_software.emulators.chip8.internals;
 
+import com.paratus_software.emulators.gameboy.cpu.Register;
+
+import java.util.Map;
+
 /**
  All instructions are 2 bytes long and are stored most-significant-byte first.
  In memory,
@@ -17,10 +21,10 @@ package com.paratus_software.emulators.chip8.internals;
  * Created by arthur on 8/14/16.
  */
 public class OpcodeTable {
-    private SubroutineInterface[] opcodes;
+    private final SubroutineInterface[] opcodes;
 
     public OpcodeTable(){
-        opcodes = initOpcodes();
+        opcodes = new SubroutineInterface[Integer.MAX_VALUE];
     }
 
     private SubroutineInterface getOpcode(int index){
@@ -58,8 +62,57 @@ public class OpcodeTable {
         };
     }
 
+    private void initZeroBasedOpcodes(){
+        opcodes[0x00E0] = new SubroutineInterface() {
+            @Override
+            public void execute() {
+                //clear the display
+            }
+        };
+        opcodes[0x00EE] = new SubroutineInterface() {
+            @Override
+            public void execute() {
+                //return from a subroutine
+            }
+        };
+    }
+
+    /**
+     *
+     1nnn - JP addr
+     Jump to location nnn.
+     */
+    private void initOneBasedOpcodes(){
+        for(int i = 0x1000; i < 0x1FFF; i++){
+            //need to grab the lowest 12 bits from i and pass it to the JumpSubroutine
+            opcodes[i] = new JumpSubroutine(i & 0x0FFF);
+        }
+    }
+
+    private SubroutineInterface jumpSubroutine(final int address){
+        return new SubroutineInterface() {
+            @Override
+            public void execute() {
+                Registers.ProgramCouter = address;
+            }
+        };
+    }
+
+
 
     private interface SubroutineInterface {
         void execute();
+    }
+
+    private class JumpSubroutine implements SubroutineInterface {
+        private int addressToJumpTo;
+        JumpSubroutine(int address){
+            addressToJumpTo = address;
+        }
+
+        @Override
+        public void execute() {
+            Registers.ProgramCouter = addressToJumpTo;
+        }
     }
 }
