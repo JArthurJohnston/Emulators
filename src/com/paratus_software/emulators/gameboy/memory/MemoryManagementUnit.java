@@ -1,7 +1,8 @@
 package com.paratus_software.emulators.gameboy.memory;
 
-import com.paratus_software.GBEmulator.cpu.Register;
-import com.paratus_software.GBEmulator.cpu.RegisterPairs;
+
+import com.paratus_software.emulators.gameboy.cpu.Register;
+import com.paratus_software.emulators.gameboy.cpu.RegisterPairs;
 
 /**
  * Created by arthur on 8/10/16.

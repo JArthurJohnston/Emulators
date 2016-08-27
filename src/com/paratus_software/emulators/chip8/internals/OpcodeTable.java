@@ -25,41 +25,17 @@ public class OpcodeTable {
 
     public OpcodeTable(){
         opcodes = new SubroutineInterface[Integer.MAX_VALUE];
+        initOpcodes();
     }
 
     private SubroutineInterface getOpcode(int index){
         return opcodes[index];
     }
 
-    private SubroutineInterface[] initOpcodes(){
-        return new SubroutineInterface[]{
-                new SubroutineInterface() {
-                    @Override
-                    public void execute() {
-                        //00E0 - CLS
-                        //Clear the display
-
-                    }
-                },
-                new SubroutineInterface() {
-                    @Override
-                    public void execute() {
-                        /*00EE - RET
-                        Return from a subroutine.
-                        The interpreter sets the program counter to the address at the top of the stack,
-                        then subtracts 1 from the stack pointer.
-                         */
-
-                    }
-                },
-                new SubroutineInterface() {
-                    @Override
-                    public void execute() {
-                        //6XNN 	Store number NN in register VX
-
-                    }
-                }
-        };
+    private void initOpcodes(){
+        initZeroBasedOpcodes();
+        initOneBasedOpcodes();
+        initZeroBasedOpcodes();
     }
 
     private void initZeroBasedOpcodes(){
@@ -78,9 +54,19 @@ public class OpcodeTable {
     }
 
     /**
+     * 3xkk - SE Vx, byte
+     SkipIfEqual next instruction if Vx = kk.
+
+     The interpreter compares register Vx to kk, and if they are equal, increments the program counter by 2.
+     */
+    private void initThreeBasedOpcodes(){
+
+    }
+
+    /**
      *
      1nnn - JP addr
-     Jump to location nnn.
+     SysAddress to location nnn.
      */
     private void initOneBasedOpcodes(){
         for(int i = 0x1000; i <= 0x1FFF; i++){
@@ -91,6 +77,25 @@ public class OpcodeTable {
                 throw new Error("Overwriting existing opcode!!!!!");
             }
             opcodes[i] = new JumpSubroutine(i & 0x0FFF);
+        }
+    }
+    /**
+     *
+     2nnn - CALL addr
+     Call subroutine at nnn.
+
+     The interpreter increments the stack pointer,
+     then puts the current PC on the top of the stack. The PC is then set to nnn.
+     */
+    private void initTwoBasedOpcodes(){
+        for(int i = 0x2000; i <= 0x2FFF; i++){
+            //need to grab the lowest 12 bits from i and pass it to the Subroutine
+
+            //for debugging
+            if(opcodes[i] != null){
+                throw new Error("Overwriting existing opcode!!!!!");
+            }
+            opcodes[i] = new CallSubroutine(i & 0x0FFF);
         }
     }
 
@@ -113,11 +118,28 @@ public class OpcodeTable {
     }
 
     private class CallSubroutine implements SubroutineInterface {
+        private int value;
+        CallSubroutine(int value){
+            this.value = value;
+        }
 
         @Override
         public void execute() {
             Stack.increment();
-            
+            Stack.setValue(Registers.ProgramCouter);
+            Registers.ProgramCouter = this.value;
+        }
+    }
+
+    private class CompareSubroutine implements SubroutineInterface {
+        private int value;
+
+        CompareSubroutine(int value){
+            this.value = value;
+        }
+
+        @Override
+        public void execute() {
         }
     }
 }

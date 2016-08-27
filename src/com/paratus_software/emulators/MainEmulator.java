@@ -7,5 +7,8 @@ public class MainEmulator {
 
     public static void main(String[] args){
 
+        RomFile rom = new RomFile("/home/arthur/IdeaProjects/Emulators/res/roms/BRIX");
+        rom.printFile();
+
     }
 }
