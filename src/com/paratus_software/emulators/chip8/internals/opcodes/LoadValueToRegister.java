@@ -9,7 +9,7 @@ import com.paratus_software.emulators.chip8.internals.Registers;
  * The interpreter puts the value kk into register Vx.
  * Created by arthur on 8/27/16.
  */
-public class Load extends AbstractInstruction {
+public class LoadValueToRegister extends AbstractInstruction {
     @Override
     public void execute(int instruction) {
         Registers.setValue(x_lowestNibbleOfTheHighByte(instruction), kk_lowestByte(instruction));

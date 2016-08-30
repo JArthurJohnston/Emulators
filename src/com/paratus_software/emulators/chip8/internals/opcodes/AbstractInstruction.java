@@ -60,4 +60,8 @@ public abstract class AbstractInstruction implements OpcodeInterface {
     protected static int kk_lowestByte(int instruction){
         return instruction & 0x00FF;
     }
+
+    protected static int leastSignificantBit(int instruction){
+        return instruction & 1;
+    }
 }

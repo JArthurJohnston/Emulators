@@ -6,7 +6,7 @@ package com.paratus_software.emulators.chip8.internals;
  * Created by arthur on 8/13/16.
  */
 public final class Registers {
-    private static int[] registers = new int[16];
+    private static int[] registers = new int[15];
     /**
      * CHIP-8 has 16 8-bit data registers named from V0 to VF. The VF register doubles as a carry flag.
      */
