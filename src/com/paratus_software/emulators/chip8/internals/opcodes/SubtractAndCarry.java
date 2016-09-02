@@ -5,9 +5,9 @@ import com.paratus_software.emulators.chip8.internals.Registers;
 /**
  *
  * 8xy5 - SUB Vx, Vy
- * Set Vx = Vx - Vy, set VF = NOT borrow.
+ * Set Vx = Vx - Vy, set VF_Flag = NOT borrow.
  *
- * If Vx > Vy, then VF is set to 1, otherwise 0.
+ * If Vx > Vy, then VF_Flag is set to 1, otherwise 0.
  * Then Vy is subtracted from Vx, and the results stored in Vx.
  *
  * Created by arthur on 8/29/16.
@@ -21,9 +21,9 @@ public class SubtractAndCarry extends AbstractInstruction {
         int subtractedValue = vx - vy;
         Registers.setValue(vxRegisterIndex, subtractedValue);
         if(subtractedValue > vy){
-            Registers.VF = 1;
+            Registers.VF_Flag = 1;
         } else {
-            Registers.VF = 0;
+            Registers.VF_Flag = 0;
         }
     }
 }
